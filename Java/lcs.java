@@ -1,5 +1,4 @@
 import java.util.Scanner;
-import java.io.*;
 
 class lcs{
     public static void main(String [] args){
@@ -16,93 +15,40 @@ class lcs{
 
         int m = first.length();
         int n = second.length();
-        int [][] C = new int[m + 1][n + 1];
-
         char [] firstString = first.toCharArray();
         char [] secondString = second.toCharArray();
-        
-        
-        //Costruzione tabella 
 
-        for(int i = 0; i < m+1; i ++){
-            for(int j = 0; j < n+1; j++){
-                if((i == 0 && j == 0) || (i == 0 && j != 0) || (i != 0 && j == 0)){
-                    C[j][i] = 0;
-                }else{
-                    if(firstString[i-1] == secondString[j-1]){
-                        C[j][i] = C[j-1][i-1] + 1;
-                    }else{
-                        if(C[j][i-1] > C[j-1][i]){
-                            C[j][i] = C[j][i-1];
-                        }else{
-                            C[j][i] = C[j-1][i];
-                        }
-                        
-                    }
-                }
-                
-            }
-        }
-
-        for(int i = 0; i < m+1; i ++){
-            for(int j = 0; j < n+1; j++){
-                System.out.print(C[i][j] + " ");
-            }
-            System.out.println("");
-        }
-
-        System.out.println(inverti(getLCS(C, m, n, firstString, secondString)));
+        System.out.println(reverse(rebuildTable(
+            buildTable(m, n, firstString, secondString), 
+                m, n, firstString, secondString, "")));
         tsr.close();
 
     }
 
 
 
-    public static String getLCS(int tabella[][], int m, int n, char first[], char second[]){
-        String LCS = "";
+    public static String rebuildTable(int table[][], int m, int n, 
+            char first[], char second[], String LCS){
         if(m == 0 && n == 0){
-            System.out.println("Caso base");
             return "";
         }else{
-            System.out.println("Caso ricorsivo");
-            if(tabella[m][n] == tabella[m-1][n] && tabella[m][n] == tabella[m][n-1]){
+            //cella a sinistra e sopra uguali 
+            if(table[m][n] == table[m - 1][n] && table[m][n] == table[m][n - 1]){
                 if(first[m - 1] == second[n - 1]){
-                    System.out.println("Caso ricorsivo primo ramo");
-
-                    System.out.println("Valore cella: " + tabella[m][n]);
-                    System.out.println("Valore lettera su m: " + first[m-1] + 
-                            "Valore lettera su n: " + second[n-1] );
-
-                    LCS = first[m-1] + getLCS(tabella, m-1, n-1, first, second);
+                    LCS = first[m - 1] + 
+                        rebuildTable(table, m - 1, n - 1, first, second, LCS);
                 }else{
-                    System.out.println("Caso ricorsivo secondo ramo");
-
-                    System.out.println("Valore cella: " + tabella[m][n]);
-                    System.out.println("Valore lettera su m: " + first[m-1] + 
-                            "Valore lettera su n: " + second[n-1] );
-
-                    getLCS(tabella, m-1, n, first, second);
+                    LCS = rebuildTable(table, m - 1, n, first, second, LCS);
                 }
             }else{
-                    if(first[m-1] == second[n-1]){
-                        System.out.println("Caso ricorsivo terzo ramo");
-
-                        System.out.println("Valore cella: " + tabella[m][n]);
-                        System.out.println("Valore lettera su m: " + first[m-1] + 
-                            "Valore lettera su n: " + second[n-1] );
-
-                        LCS = first[m-1] + getLCS(tabella, m-1, n-1, first, second);
+                    if(first[m - 1] == second[n - 1]){
+                        LCS = first[m - 1] + rebuildTable(table, m - 1, n - 1, first, 
+                        second, LCS);
                     }else{
-                        if(tabella[m-1][n] >= tabella[m][n-1]){
-                            System.out.println("Caso ricorsivo quarto ramo");
-
-                            System.out.println("Valore cella: " + tabella[m][n]);
-                            System.out.println("Valore lettera su m: " + first[m-1] + 
-                            "Valore lettera su n: " + second[n-1] );
-
-                            getLCS(tabella, m-1, n, first, second);
+                        if(table[m - 1][n] >= table[m][n - 1]){
+                            LCS = rebuildTable(table, m - 1, n, first, second, LCS);
                         }else{
-                            getLCS(tabella, m, n-1, first, second);
+                            LCS = rebuildTable(table, m, n - 1, first, second, LCS);
                         }
                     }
             }
@@ -112,7 +58,31 @@ class lcs{
     }
 
 
-    public static String inverti(String string){
+    public static int[][] buildTable(int m, int n, char firstString[], char secondString[]){
+        int [][] C = new int[m + 1][n + 1];
+        for(int i = 0; i < m + 1; i ++){
+            for(int j = 0; j < n + 1; j++){
+                if((i == 0 && j == 0) || (i == 0 && j != 0) || (i != 0 && j == 0)){
+                    C[i][j] = 0;
+                }else{
+                    if(firstString[i - 1] == secondString[j - 1]){
+                        C[i][j] = C[i-1][j-1] + 1;
+                    }else{
+                        if(C[i][j - 1] > C[i - 1][j]){
+                            C[i][j] = C[i][j - 1];
+                        }else{
+                            C[i][j] = C[i - 1][j];
+                        }
+                        
+                    }
+                }
+                
+            }
+        }
+        return C;
+    }
+
+    public static String reverse(String string){
         char support[] = string.toCharArray();
         String newString = "";
         for(int i = support.length - 1; i >= 0; i--){
