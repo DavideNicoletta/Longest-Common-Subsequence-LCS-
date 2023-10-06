@@ -12,7 +12,6 @@ class lcs{
         String second = tsr.nextLine();
         System.out.println("");
         
-
         int m = first.length();
         int n = second.length();
         char [] firstString = first.toCharArray();
