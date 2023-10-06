@@ -21,8 +21,10 @@ def buildTable(firstVector, secondVector) -> list:
             else:
                 table[i][j] = table[i - 1][j]
 
-    printTable(table)
+    #printTable(table)
     return table
+
+
 
 def rebuiltTable(table, m, n, firstVector, secondVector, LCS) -> str:
     if m == 0 and n == 0:
@@ -30,24 +32,31 @@ def rebuiltTable(table, m, n, firstVector, secondVector, LCS) -> str:
     else:
         if table[m][n] == table[m - 1][n] and table[m][n] == table[m][n - 1]:
             if firstVector[m - 1] == secondVector[n - 1]: 
-                    LCS = firstVector[m - 1] + rebuiltTable(table, m, n, firstVector, secondVector, LCS)
+                    LCS = firstVector[m - 1] + rebuiltTable(table, m - 1, n - 1, firstVector, secondVector, LCS)
             else:
                     LCS = rebuiltTable(table, m - 1, n, firstVector, secondVector, LCS)
         else:
             if firstVector[m - 1] == secondVector[n - 1]:
-                        LCS = firstVector[m - 1] + rebuiltTable(table, m, n, firstVector, secondVector, LCS)
+                        LCS = firstVector[m - 1] + rebuiltTable(table, m - 1, n - 1, firstVector, secondVector, LCS)
             else:
                 if table[m - 1][n] >= table[m][n - 1]:
                     LCS = rebuiltTable(table, m - 1, n, firstVector, secondVector, LCS)
                 else:
                     LCS = rebuiltTable(table, m, n - 1, firstVector, secondVector, LCS)
+    #print(LCS)
     return LCS     
-                           
+
+
+
 def reverse(LCS) -> str:
-     LCSList = list(LCS)
-     string = ""
-     for x in LCSList:
-          string = string + x
+    LCSList = list(LCS)
+    string = ""
+    max = len(LCSList) - 1
+    for x in range(max, -1, -1):
+        string = string + LCSList[x]
+    
+    return string
+    
 
 
 
