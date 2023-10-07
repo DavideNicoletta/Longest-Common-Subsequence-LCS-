@@ -1,5 +1,3 @@
-
-
 def printTable(table) -> None:
     for row in table:
         for element in row:
@@ -9,7 +7,7 @@ def printTable(table) -> None:
 def buildTable(firstVector, secondVector) -> list:
     m = int(len(firstVector))
     n = int(len(secondVector))
-    table = [[0 for y in range(m + 1)] for x in range(n + 1)]
+    table = [[0 for x in range(n + 1)] for y in range(m + 1) ]
     for i in range(m + 1):
         for j in range(n + 1):
             if (i == 0 and j == 0) or (i == 0 and j != 0) or (i != 0 and j == 0):
@@ -17,11 +15,10 @@ def buildTable(firstVector, secondVector) -> list:
             elif firstVector[i - 1] == secondVector[j - 1]:
                 table[i][j] = table[i-1][j-1] + 1
             elif table[i][j - 1] > table[i - 1][j]:
-                 table[i][j] = table[i][j - 1]
+                table[i][j] = table[i][j - 1]
             else:
                 table[i][j] = table[i - 1][j]
-
-    #printTable(table)
+    printTable(table)
     return table
 
 
@@ -43,7 +40,7 @@ def rebuiltTable(table, m, n, firstVector, secondVector, LCS) -> str:
                     LCS = rebuiltTable(table, m - 1, n, firstVector, secondVector, LCS)
                 else:
                     LCS = rebuiltTable(table, m, n - 1, firstVector, secondVector, LCS)
-    #print(LCS)
+
     return LCS     
 
 
@@ -65,7 +62,10 @@ string2 = input("Inserisci stringa 2\n")
 
 firstVector = list(string1)
 secondVector = list(string2)
-print(reverse(
-     rebuiltTable(
-          buildTable(firstVector, secondVector), len(firstVector), len(secondVector), firstVector, secondVector, "")))
+
+
+
+print("LCS: " + reverse(
+        rebuiltTable(
+            buildTable(firstVector, secondVector), len(firstVector), len(secondVector), firstVector, secondVector, "")))
 
