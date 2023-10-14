@@ -7,7 +7,7 @@ def printTable(table) -> None:
 def buildTable(firstVector, secondVector) -> list:
     m = int(len(firstVector))
     n = int(len(secondVector))
-    table = [[0 for x in range(n + 1)] for y in range(m + 1) ]
+    table = [[0 for x in range(n + 1)] for y in range(m + 1)]
     for i in range(m + 1):
         for j in range(n + 1):
             if (i == 0 and j == 0) or (i == 0 and j != 0) or (i != 0 and j == 0):
