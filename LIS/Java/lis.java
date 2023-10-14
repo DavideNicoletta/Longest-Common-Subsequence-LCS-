@@ -19,33 +19,28 @@ class lis{
         int initial [] = {0, 4, 12, 2, 10, 6, 9, 13, 3, 11, 7, 15};
         //int initial [] = {1, 3, 2, 7, 8};
 
-        //printArray(initial);
+        
         int [][] table = buildTable(initial);
+        ArrayList<Integer> toPrint = new ArrayList<Integer>();
         
-        int [] print = rebuiltTable(table, initial, initial.length);
-        
-        printArray(print);
+        printList(
+            rebuiltTable(initial, table[1], initial.length-1, toPrint)
+        );
     }
 
 
     //Funzione di stampa dell'array
-    public static void printArray(int [] array){
-        for(int i = 0; i < array.length; i++){
-            System.out.print(array[i] + " ");
+    public static void printList(ArrayList<Integer> array){
+        Collections.sort(array);
+
+        for(int x : array){
+            System.out.print(x);
+            System.out.print(" ");
         }
-        System.out.println("\n");
+        System.out.println("");
     }
 
-    //Funzione di stampa della tabella
-    public static void printTable(int [][] table, int len){
-        for(int i = 0; i < 2; i++){
-            for(int j = 0; j < len; j++){
-                System.out.print(table[i][j] + " ");
-            }
-            System.out.println(" ");
-        }
-    }
-
+    
     //Funzione di costruzione della tabella
     public static int [][] buildTable(int [] array){
         int len = array.length;
@@ -70,28 +65,25 @@ class lis{
                 }
             }
         }
-       
-        printTable(table, len);
         return table;
 
     }
 
 
     //Funzione di costruzione della ssotto-sequenza a partire dalla tabella
-    public static int [] rebuiltTable(int [][] table, int [] array, int len){
-        int i = len - 1;
-        int bound = table[0][i];
-        int [] ret = new int[bound];
-        int index = table[1][len-1];
-        ret[bound - 1] = array[table[1][index]];
-        bound--;
-        index = table[1][index];
-        do{
-            ret[bound - 1] = array[table[1][index]];
-            index = table[1][index];
-            bound--;
-        }while(index != 0);
-        return ret;
+    public static ArrayList rebuiltTable(int [] initial, int[] array, int index, ArrayList list){
+        if(index != 0){
+            list.add(initial[index]);
+            rebuiltTable(initial, array, array[index], list);
+        }else{
+            if(initial[index] < initial[index+1]){
+                list.add(initial[index]);
+            }
+        }
+
+        return list;
+
     }
+
 
 }
